@@ -1,0 +1,30 @@
+{
+  "name": "skillbridge-backend",
+  "version": "1.0.0",
+  "description": "A full‑stack tutoring platform backend built as **Assignment Project**. SkillBridge connects learners with expert tutors. **Students** can browse tutor profiles, view availability, and book sessions instantly. **Tutors** can manage their profiles, set availability, and track their teaching sessions. **Admins** oversee the platform and manage users.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.10",
+    "@types/pg": "^8.16.0",
+    "prisma": "^7.3.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "pg": "^8.17.2"
+  }
+}
