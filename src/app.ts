@@ -3,6 +3,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { globalErrorHandler } from "./middlewares/errorHandler";
 import { tutorRoutes } from "./modules/tutor/tutor.route";
 import { BookingRoutes } from "./modules/booking/booking.route";
+import { reviewRoutes } from "./modules/review/review.route";
 
 
 const app:Application = express();
@@ -18,5 +19,7 @@ app.use("/api/auth",authRoutes);
 app.use("/api/tutors", tutorRoutes);
 //booking
 app.use("/api/bookings", BookingRoutes);
+//review
+app.use("/api", reviewRoutes);
 
 export default app;
