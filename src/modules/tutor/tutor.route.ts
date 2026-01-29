@@ -6,15 +6,37 @@ import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
+//dashboard
+router.get(
+  "/dashboard",
+  authMiddleware,
+  roleMiddleware(Role.TUTOR),
+  TutorController.getDashboard
+);
+
+// only tutor er rotes..
+router.get(
+    "/profile/me", 
+    authMiddleware, 
+    roleMiddleware(Role.TUTOR), TutorController.getProfile
+);
+
 // publicRoute..
 // public search
-router.get("/", TutorController.searchTutors);
+router.get("/search", TutorController.searchTutors);
 router.get("/", TutorController.getAllTutors);
 router.get("/:id", TutorController.getTutorById);
 
-// only tutor er rotes..
-router.get("/profile/me", authMiddleware, roleMiddleware(Role.TUTOR), TutorController.getProfile);
-router.post("/profile/me", authMiddleware, roleMiddleware(Role.TUTOR), TutorController.createOrUpdateProfile);
-router.put("/profile/me", authMiddleware, roleMiddleware(Role.TUTOR), TutorController.createOrUpdateProfile);
+
+router.post(
+    "/profile/me", 
+    authMiddleware, 
+    roleMiddleware(Role.TUTOR), TutorController.createOrUpdateProfile
+);
+router.put(
+    "/profile/me", 
+    authMiddleware, 
+    roleMiddleware(Role.TUTOR), TutorController.createOrUpdateProfile
+);
 
 export const tutorRoutes = router;

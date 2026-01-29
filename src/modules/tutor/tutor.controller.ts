@@ -57,10 +57,31 @@ const getTutorById = async (req: Request, res: Response) => {
   }
 };
 
+const getDashboard = async (req: AuthRequest, res: Response) => {
+  try {
+    const data = await TutorService.getTutorDashboard(
+      req.user!.tutorProfileId!
+    );
+
+    res.json({
+      success: true,
+      message: "Tutor dashboard data",
+      data,
+    });
+  } catch (e: any) {
+    res.status(400).json({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
+
 export const TutorController = {
   getProfile,
   createOrUpdateProfile,
   getAllTutors,
   getTutorById,
   searchTutors,
+  getDashboard,
 };

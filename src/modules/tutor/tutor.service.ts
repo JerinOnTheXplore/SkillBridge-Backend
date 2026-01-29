@@ -167,10 +167,92 @@ const getTutorById = async (id: string) => {
   });
 };
 
+const getTutorDashboard = async (tutorProfileId: string) => {
+  const now = new Date();
+
+  const [
+    totalBookings,
+    confirmedCount,
+    completedCount,
+    cancelledCount,
+    upcomingSessions,
+    recentCompleted,
+    reviewStats,
+  ] = await Promise.all([
+    prisma.booking.count({
+      where: { tutorId: tutorProfileId },
+    }),
+
+    prisma.booking.count({
+      where: { tutorId: tutorProfileId, status: "CONFIRMED" },
+    }),
+
+    prisma.booking.count({
+      where: { tutorId: tutorProfileId, status: "COMPLETED" },
+    }),
+
+    prisma.booking.count({
+      where: { tutorId: tutorProfileId, status: "CANCELLED" },
+    }),
+
+    prisma.booking.findMany({
+      where: {
+        tutorId: tutorProfileId,
+        date: { gte: now },
+        status: "CONFIRMED",
+      },
+      include: {
+        student: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+      orderBy: { date: "asc" },
+      take: 5,
+    }),
+
+    prisma.booking.findMany({
+      where: {
+        tutorId: tutorProfileId,
+        status: "COMPLETED",
+      },
+      include: {
+        student: {
+          select: { id: true, name: true },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+    }),
+
+    prisma.review.aggregate({
+      where: { tutorId: tutorProfileId },
+      _count: { _all: true },
+      _avg: { rating: true },
+    }),
+  ]);
+
+  return {
+    stats: {
+      totalBookings,
+      confirmedCount,
+      completedCount,
+      cancelledCount,
+      totalReviews: reviewStats._count._all,
+      averageRating: reviewStats._avg.rating || 0,
+    },
+
+    sessions: {
+      upcoming: upcomingSessions,
+      recentCompleted,
+    },
+  };
+};
+
 export const TutorService = {
   getTutorProfile,
   createOrUpdateProfile,
   getAllTutors,
   getTutorById,
   searchTutors,
+  getTutorDashboard,
 };
