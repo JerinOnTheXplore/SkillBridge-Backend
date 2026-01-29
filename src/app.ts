@@ -5,6 +5,7 @@ import { tutorRoutes } from "./modules/tutor/tutor.route";
 import { BookingRoutes } from "./modules/booking/booking.route";
 import { reviewRoutes } from "./modules/review/review.route";
 import { availabilityRoutes } from "./modules/availability/availability.routes";
+import { adminRoutes } from "./modules/admin/admin.route";
 
 
 const app:Application = express();
@@ -24,6 +25,8 @@ app.use("/api/bookings", BookingRoutes);
 app.use("/api", reviewRoutes);
 //availability
 app.use("/api/availability", availabilityRoutes);
+//admin
+app.use("/api/admin", adminRoutes);
 
 
 export default app;
