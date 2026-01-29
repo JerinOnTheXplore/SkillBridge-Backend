@@ -8,6 +8,8 @@ const router = Router();
 
 router.use(authMiddleware, requireAdmin);
 
+router.get("/dashboard", AdminController.dashboard);
+
 router.get("/users", AdminController.listUsers);
 
 router.patch("/users/:id/ban", AdminController.banUser);

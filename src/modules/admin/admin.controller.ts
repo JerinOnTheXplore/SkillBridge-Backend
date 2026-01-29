@@ -39,9 +39,27 @@ const listBookings = async (req: Request, res: Response) => {
   });
 };
 
+const dashboard = async (req: Request, res: Response) => {
+  try {
+    const stats = await AdminService.getDashboardStats();
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to load admin dashboard stats",
+    });
+  }
+};
+
+
 export const AdminController = {
   listUsers,
   banUser,
   unbanUser,
   listBookings,
+  dashboard,
 };
