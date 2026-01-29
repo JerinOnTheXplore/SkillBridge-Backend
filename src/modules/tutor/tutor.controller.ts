@@ -2,6 +2,23 @@ import { Request, Response } from "express";
 import { TutorService, TutorProfilePayload } from "./tutor.service";
 import { AuthRequest } from "../../middlewares/auth.middleware";
 
+const searchTutors = async (req: Request, res: Response) => {
+  try {
+    const result = await TutorService.searchTutors(req.query);
+
+    res.json({
+      success: true,
+      message: "Tutors fetched successfully",
+      ...result,
+    });
+  } catch (e: any) {
+    res.status(400).json({
+      success: false,
+      message: e.message,
+    });
+  }
+};
+
 const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     const profile = await TutorService.getTutorProfile(req.user.userId);
@@ -45,4 +62,5 @@ export const TutorController = {
   createOrUpdateProfile,
   getAllTutors,
   getTutorById,
+  searchTutors,
 };

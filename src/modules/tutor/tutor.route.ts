@@ -7,6 +7,8 @@ import { Role } from "../../../generated/prisma/enums";
 const router = Router();
 
 // publicRoute..
+// public search
+router.get("/", TutorController.searchTutors);
 router.get("/", TutorController.getAllTutors);
 router.get("/:id", TutorController.getTutorById);
 

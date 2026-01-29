@@ -7,6 +7,97 @@ export interface TutorProfilePayload {
   categoryIds?: string[];
 }
 
+interface TutorSearchQuery {
+  search?: string;
+  categoryId?: string;
+  minRating?: string;
+  minExperience?: string;
+  page?: string;
+  limit?: string;
+}
+const searchTutors = async (query: TutorSearchQuery) => {
+  const {
+    search,
+    categoryId,
+    minRating,
+    minExperience,
+    page = "1",
+    limit = "10",
+  } = query;
+
+  const pageNum = Number(page);
+  const limitNum = Number(limit);
+  const skip = (pageNum - 1) * limitNum;
+
+  const where: any = {
+    user: {
+      status: "ACTIVE",
+      role: "TUTOR",
+    },
+  };
+
+  // name search
+  if (search) {
+    where.user.name = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+
+  // rating filter
+  if (minRating) {
+    where.rating = {
+      gte: Number(minRating),
+    };
+  }
+
+  // experience filter
+  if (minExperience) {
+    where.experience = {
+      gte: Number(minExperience),
+    };
+  }
+
+  // category filter
+  if (categoryId) {
+    where.categories = {
+      some: {
+        id: categoryId,
+      },
+    };
+  }
+
+  const [data, total] = await Promise.all([
+    prisma.tutorProfile.findMany({
+      where,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        categories: true,
+      },
+      skip,
+      take: limitNum,
+      orderBy: { rating: "desc" },
+    }),
+
+    prisma.tutorProfile.count({ where }),
+  ]);
+
+  return {
+    meta: {
+      page: pageNum,
+      limit: limitNum,
+      total,
+    },
+    data,
+  };
+};
+
 const getTutorProfile = async (userId: string) => {
   return prisma.tutorProfile.findUnique({
     where: { userId },
@@ -81,4 +172,5 @@ export const TutorService = {
   createOrUpdateProfile,
   getAllTutors,
   getTutorById,
+  searchTutors,
 };
