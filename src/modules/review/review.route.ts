@@ -29,7 +29,17 @@ router.get(
   roleMiddleware(Role.STUDENT),
   ReviewController.getMyReviews
 );
-router.patch("/:id/reviews", authMiddleware, ReviewController.updateReview);
-router.delete("/:id/reviews", authMiddleware, ReviewController.deleteReview);
+//update
+router.patch(
+  "/reviews/:id",
+  authMiddleware, 
+  roleMiddleware(Role.STUDENT),
+  ReviewController.updateReview);
+//delete..
+router.delete(
+  "/reviews/:id", 
+  authMiddleware,
+  roleMiddleware(Role.STUDENT), 
+  ReviewController.deleteReview);
 
 export const reviewRoutes = router;

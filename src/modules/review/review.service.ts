@@ -7,6 +7,23 @@ interface ReviewPayload {
   rating: number; // 1 theke 5..
   comment?: string;
 }
+//tutor rating k re calculate kore..
+const recalcTutorRating = async (tutorId: string) => {
+  const tutorReviews = await prisma.review.findMany({
+    where: { tutorId },
+    select: { rating: true },
+  });
+
+  const avg =
+    tutorReviews.length > 0
+      ? tutorReviews.reduce((a, r) => a + r.rating, 0) / tutorReviews.length
+      : 0;
+
+  await prisma.tutorProfile.update({
+    where: { id: tutorId },
+    data: { rating: avg },
+  });
+};
 
 const createReview = async (
   studentId: string,
@@ -41,8 +58,11 @@ const createReview = async (
     throw new Error("Review already submitted for this booking");
   }
 
-  // review create kora..
-  return prisma.review.create({
+  if (payload.rating < 1 || payload.rating > 5) {
+    throw new Error("Rating must be between 1 and 5");
+  }
+//rating validation..
+  const review = await prisma.review.create({
     data: {
       studentId,
       tutorId: booking.tutorId,
@@ -51,6 +71,10 @@ const createReview = async (
       comment: payload.comment,
     } as Prisma.ReviewUncheckedCreateInput,
   });
+//create er por tutor-rating aauto update hoy..
+  await recalcTutorRating(booking.tutorId);
+
+  return review;
 };
 
 const getTutorReviews = async (tutorProfileId: string) => {
@@ -97,6 +121,11 @@ const updateReview = async (
   if (Date.now() - review.createdAt.getTime() > sevenDays)
     throw new Error("Review can only be edited within 7 days");
 
+//update er khtre rating validation..
+  if (payload.rating && (payload.rating < 1 || payload.rating > 5)) {
+    throw new Error("Rating must be between 1 and 5");
+  }
+
   const updated = await prisma.review.update({
     where: { id: reviewId },
     data: {
@@ -104,11 +133,11 @@ const updateReview = async (
       comment: payload.comment ?? review.comment,
     },
   });
-
+  
   // tutor rating update hoy..
   const tutorReviews = await prisma.review.findMany({
     where: { tutorId: review.tutorId },
-    select: { rating: true },
+    select: { rating: true},
   });
   const averageRating =
     tutorReviews.reduce((acc, r) => acc + r.rating, 0) / tutorReviews.length;
@@ -117,7 +146,6 @@ const updateReview = async (
     where: { id: review.tutorId },
     data: { rating: averageRating },
   });
-
   return updated;
 };
 //delete
