@@ -7,11 +7,11 @@ import { CategoryController } from "./category.controller";
 
 const router = Router();
 
+router.get("/", CategoryController.list);
 router.post("/admin", 
  authMiddleware,
  roleMiddleware(Role.ADMIN),
  CategoryController.create);
-router.get("/", CategoryController.list);
 router.patch("/admin/:id",
  authMiddleware,
  roleMiddleware(Role.ADMIN),

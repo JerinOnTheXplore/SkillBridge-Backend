@@ -297,8 +297,7 @@ var init_auth_middleware = __esm({
         let tutorProfileId;
         if (user.role === "TUTOR") {
           const profile = await prisma.tutorProfile.findUnique({ where: { userId: user.id } });
-          if (!profile) return res.status(403).json({ message: "Tutor profile not found" });
-          tutorProfileId = profile.id;
+          tutorProfileId = profile?.id;
         }
         req.user = {
           userId: user.id,
@@ -1618,11 +1617,25 @@ var init_category_route = __esm({
     init_enums();
     init_category_controller();
     router7 = Router7();
-    router7.use(authMiddleware, roleMiddleware(Role.ADMIN));
-    router7.post("/", CategoryController.create);
     router7.get("/", CategoryController.list);
-    router7.patch("/:id", CategoryController.update);
-    router7.delete("/:id", CategoryController.remove);
+    router7.post(
+      "/admin",
+      authMiddleware,
+      roleMiddleware(Role.ADMIN),
+      CategoryController.create
+    );
+    router7.patch(
+      "/admin/:id",
+      authMiddleware,
+      roleMiddleware(Role.ADMIN),
+      CategoryController.update
+    );
+    router7.delete(
+      "/admin/:id",
+      authMiddleware,
+      roleMiddleware(Role.ADMIN),
+      CategoryController.remove
+    );
     CategoryRoutes = router7;
   }
 });
@@ -1849,7 +1862,7 @@ var init_app = __esm({
     app.use("/api", reviewRoutes);
     app.use("/api/availability", availabilityRoutes);
     app.use("/api/admin", adminRoutes);
-    app.use("/api/admin/categories", CategoryRoutes);
+    app.use("/api/categories", CategoryRoutes);
     app_default = app;
   }
 });
