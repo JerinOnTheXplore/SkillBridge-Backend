@@ -29,9 +29,8 @@ console.log("Token from header:", token);
     let tutorProfileId: string | undefined;
 
     if (user.role === "TUTOR") {
-      const profile = await prisma.tutorProfile.findUnique({ where: { userId: user.id } });
-      if (!profile) return res.status(403).json({ message: "Tutor profile not found" });
-      tutorProfileId = profile.id;
+      const profile = await prisma.tutorProfile.findUnique({ where: { userId: user.id } });     
+      tutorProfileId = profile?.id;
     }
 
     req.user = {

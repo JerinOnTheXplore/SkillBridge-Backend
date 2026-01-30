@@ -85,32 +85,32 @@ This project strictly follows the **assignment requirements** provided.
 | Route | Page | Description |
 |-------|------|-------------|
 | `/` | Home | Hero, search, featured tutors |
-| `/tutors` | Browse Tutors | List with filters |
-| `/tutors/:id` | Tutor Profile | Details, reviews, book |
-| `/login` | Login | Login form |
-| `/register` | Register | Registration form |
+| `api/tutors` | Browse Tutors | List with filters |
+| `api/tutors/:id` | Tutor Profile | Details, reviews, book |
+| `api/auth/login` | Login | Login form |
+| `api/auth/register` | Register | Registration form |
 
 ### Student Routes (Private)
 | Route | Page | Description |
 |-------|------|-------------|
-| `/dashboard` | Dashboard | Overview, bookings |
-| `/dashboard/bookings` | My Bookings | Booking history |
-| `/dashboard/profile` | Profile | Edit info |
+| `/api/dashboard` | Dashboard | Overview, bookings |
+| `/api/dashboard/bookings` | My Bookings | Booking history |
+| `/api/dashboard/profile` | Profile | Edit info |
 
 ### Tutor Routes (Private)
 | Route | Page | Description |
 |-------|------|-------------|
-| `/tutor/dashboard` | Dashboard | Sessions, stats |
-| `/tutor/availability` | Availability | Set time slots |
-| `/tutor/profile` | Profile | Edit tutor info |
+| `api/tutors/dashboard` | Dashboard | Sessions, stats |
+| `/api/availability/my` | Availability | Set time slots |
+| `api/tutors/profile` | Profile | Edit tutor info |
 
 ### Admin Routes (Private)
 | Route | Page | Description |
 |-------|------|-------------|
-| `/admin` | Dashboard | Statistics |
-| `/admin/users` | Users | Manage users |
-| `/admin/bookings` | Bookings | All bookings |
-| `/admin/categories` | Categories | Manage categories |
+| `/api/admin/dashboard` | Dashboard | Statistics |
+| `api/admin/users` | Users | Manage users |
+| `api/admin/bookings` | Bookings | All bookings |
+| `/api/admin/categories` | Categories | Manage categories |
 
 ---
 
@@ -147,24 +147,25 @@ Design your own schema for the following tables:
 |--------|----------|-------------|
 | POST | `/api/bookings` | Create new booking |
 | GET | `/api/bookings` | Get user's bookings |
-| GET | `/api/bookings/:id` | Get booking details |
+| GET | `/api/bookings/tutor` | Get booking by tutors |
 
 ### Tutor Management
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| PUT | `/api/tutor/profile` | Update tutor profile |
-| PUT | `/api/tutor/availability` | Update availability |
+| PUT | `/api/tutors/profile/me` | Update tutor profile |
+| PUT | `/api/tutor/profile/me` | Update availability |
 
 ### Reviews
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/reviews` | Create review |
+| POST | `/api/bookings/:bookingId/review` | Create review |
 
 ### Admin
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/admin/users` | Get all users |
-| PATCH | `/api/admin/users/:id` | Update user status |
+| PATCH | `/api/admin/users/:id/ban` | Update user status to BANNED |
+| PATCH | `/api/admin/users/:id/unban` | Update user status to ACTIVE |
 
 ---
 ## Flow Diagrams

@@ -7,11 +7,18 @@ import { CategoryController } from "./category.controller";
 
 const router = Router();
 
-router.use(authMiddleware, roleMiddleware(Role.ADMIN));
-
-router.post("/", CategoryController.create);
+router.post("/admin", 
+ authMiddleware,
+ roleMiddleware(Role.ADMIN),
+ CategoryController.create);
 router.get("/", CategoryController.list);
-router.patch("/:id", CategoryController.update);
-router.delete("/:id", CategoryController.remove);
+router.patch("/admin/:id",
+ authMiddleware,
+ roleMiddleware(Role.ADMIN),
+ CategoryController.update);
+router.delete("/admin/:id",
+ authMiddleware,
+ roleMiddleware(Role.ADMIN), 
+ CategoryController.remove);
 
 export const CategoryRoutes = router;

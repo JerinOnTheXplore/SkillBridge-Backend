@@ -32,7 +32,7 @@ app.use("/api/availability", availabilityRoutes);
 //admin
 app.use("/api/admin", adminRoutes);
 //category
-app.use("/api/admin/categories",CategoryRoutes)
+app.use("/api/categories",CategoryRoutes)
 
 
 export default app;
