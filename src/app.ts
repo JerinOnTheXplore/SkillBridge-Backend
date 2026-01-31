@@ -8,9 +8,15 @@ import { availabilityRoutes } from "./modules/availability/availability.routes";
 import { adminRoutes } from "./modules/admin/admin.route";
 import { CategoryRoutes } from "./modules/category/category.route";
 import { studentDashboardRoutes } from "./modules/studentDashboard/student.dashboard.route";
-
+import cors from "cors";
 
 const app:Application = express();
+
+app.use(cors({
+  origin: "http://localhost:3000", // frontend URL
+  credentials: true, // if you want to send cookies/auth
+}));
+
 app.use(express.json());
 
 app.get("/",(req,res)=>{
