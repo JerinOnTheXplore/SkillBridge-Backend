@@ -13,7 +13,7 @@ import cors from "cors";
 const app:Application = express();
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://skillbridge-frontend-six.vercel.app/"],
   credentials: true,
 }));
 
